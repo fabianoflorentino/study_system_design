@@ -222,3 +222,33 @@ topics:
 
   - name: Mutex
     content: |
+      Voltando ao churrasco, após observar o exemplo de Race Conditions, concluímos que é impossível assar todos os alimentos
+      ao mesmo tempo na grelha, já que ela só comporta um item por vez. Portanto, é necessário que alguém do churrasco fique
+      responsável por assas os alimentos em sequência.
+
+      Como a churrasqueira é um recurso compartilhado, essa pessoa atuará como uma "trava" para o uso da churrasqueira:
+      um alimento é assado, e então o próximo é colocado. Esse cenário ilustra a função de um Mutex.
+
+      Mutex é a abreviação de Mutual Exclusion (Exclusão mútua), e é uma estratégia eficiente para controlar o acesso a
+      um recurso compartilhado em ambientes de multithreading, paralelismo ou concorrência. Ela possibilita um acesso
+      sequencial e organizado aos recursos, sendo uma das principais ferramentas para programação concorrente e paralela.
+
+      O principal objetivo do Mutex é evitar race conditions, como visto anteriormente, garantindo que apenas uma thread
+      por vez possa acessar um recurso. As operações básicas de um Mutex são Lock, para bloquear o acesso ao recurso, e
+      unlock para liberá-lo para a próxima thread.
+
+      Estas operações de lock/unlock também deve respeitar uma certa prioridade, ou seja, apenas a thread que bloqueou o
+      recurso pode desbloqueá-lo.
+
+      Sem um mutex, todos tentariam usar a churrasqueira simultaneamente, resultando em confusão, dispurtas e, possivelmente,
+      alimentos mal preparados ou queimados.
+
+      Contudo, o uso de mutexes não está isento de riscos, sendo o principal deles o Deadlock. Um deadlock ocorre quando
+      várias threads tentam bloquear múltiplos mutexes em uma ordem inconsistente.
+
+      No Go, podemos trabalhar com Mutexes através do pacote sync. Para solucionar o problema de race conditio com a grelha,
+      podemos:
+        - Criar um orquestrador para o uso da grelha, chamado de grelhaOcupada, usando o sync.Mutex.
+        - Durante a preparação, na funcão grelhar(), inserimos um Mutex.Lock() no início e um Mutex.Unlock() no final para
+        liberar o recurso para a próxima thread.
+        - Assim, garantimos um acesso sequencial a todos os processos para grelhar itens na churrasqueira.
