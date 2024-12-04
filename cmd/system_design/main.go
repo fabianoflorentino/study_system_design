@@ -26,5 +26,9 @@ func main() {
 		if option[0] == "--racecondition" {
 			paralelismo_concorrencia_multithreading.RaceCondition()
 		}
+
+		if option[0] == "--mutex" {
+			paralelismo_concorrencia_multithreading.RaceConditionComMutex()
+		}
 	}
 }
