@@ -173,3 +173,52 @@ topics:
     subtopics:
       - name: Deadlocks e Starvation
         content: |
+          Image que você está usando a grelha, um recurso compartilhado no seu churrasco, para preparar o pão de alho,
+          enquanto seu amigo está segurando a espátula (lembre-se, nada de furar a carne com garfo, pelo a mo de Deus...),
+          outro recurso essencial. Você precisa de espátula, e seu amigo precisa da grelha. Ambos aguardam que o recurso
+          do outro fique disponível, mas nenhum de vocês libera o recurso que possui, criando um impasse onde nenhuma das
+          tarefas pode prosseguir. Isso exemplifica um Deadlock.
+
+          Um deadlock ocorre quando duas ou mais threads (ou processo) entram em um estado de espera permanente, pois cada
+          uma está esperando por um recurso que está sob pose de outra. Em suma, existe um ciclo de dependência que impede
+          qualquer avanço.
+
+          Agora, imagine outra situação onde cada um precisa preparar sua própria refeição devido a preferências específicas
+          de ponto da carne. Seu grupo de amigos se divide entre os mais ágeis, cara-de-pau e esfomeados, e os mais educados
+          e lentos. À medida que as grelhas ficam disponíveis, o primeiro grupo ocupa rapidamente os espaços, deixando pouco
+          ou nenhum acesso para o segundo grupo. Como resultado, as pessoas mais tranquilas enfretam dificuldades para assar
+          sua comida, experimentando um espécie de Starvation.
+
+          Starvation, ou inanição, ocorre quando uma ou mais threads não conseguem acessar os recursos necessários por um
+          longo período. Isso é frequentemente causado por uma alocação de recurso desigual, onde certas threads são
+          priorizadas em detrimento de outras.
+
+      - name: Race Conditions (Condições de Corrida)
+        content: |
+          Imagine que você está organizando outro churrasco com seus amigos. Desta vez há apenas uma churrasqueira disponível
+          para grelhar todos os alimentos. Você precisam preparar picanha, maminha, legumes, abacaxi, linguiça, pão de alho
+          e mais. A churrasqueira é pequena e só permite assar um tipo de alimento por vez. Aqui, a churrasqueira representa
+          um recurso compartilhado, e uma Race Condition (condição de corrida) pode surgir se todos os alimentos forem
+          preparados para assar simultaneamente.
+
+          Race condition é um fenômeno comum quando um recurso compartilhado é acessado e modificado por várias tarefas ou
+          threads em parelelo. O estado final desse recurso pode depender da ordem em que as modificações são realizadas,
+          que pode variar a cada execução. Por exemplo, considere o seguinte algoritmo:
+
+            - Inicialmente, temos um número definido de itens (como 100) disponíveis para serem grelhados.
+            - Temos um contador que registra o número de itens que forem grelhados.
+            - Idealmente, se começarmos com 100 itens disponíveis, o contador de itens grelhados também deveria terminar
+            com o valor 100.
+
+          Podemos observar que o resultado varia de acordo com a ordem e o tempo que as goroutines acessam o contador.
+          Esse é o cerne do problema de race condition: a inconsistência dos resultados devido ao acesso simultâneo ao
+          mesmo recurso. Emboraa analogia com o churrasco seja útil para ilustrar o conceito, na realidade prática de um
+          churrasco, a grelha não comportaria todos os alimentos ao mesmo tempo. Portanto, a situação de race condition,
+          neste contexto, seria menos provável, já que a limitação física da grelha impõe um controle natural sobre o
+          acesso simultâneo. No entando, em sistema de computação, onde múltipas threads podem acessar e modificar o mesmo
+          recurso sem uma devida sincronização, a race condition se torna um problema significativo e desafiador.
+
+          Link: https://go.dev/play/p/QQQwp9YuikV
+
+  - name: Mutex
+    content: |
