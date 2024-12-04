@@ -22,5 +22,9 @@ func main() {
 		if option[0] == "--paralelismo" {
 			paralelismo_concorrencia_multithreading.ChurrascoParalelismo()
 		}
+
+		if option[0] == "--racecondition" {
+			paralelismo_concorrencia_multithreading.RaceCondition()
+		}
 	}
 }
