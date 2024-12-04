@@ -1,0 +1,175 @@
+---
+title: Paralelismo, Concorrência e Multithreading
+url: https://fidelissauro.dev/concorrencia-paralelismo/
+topics:
+  - name: Introdução
+    content: |
+      Este artigo é o primeiro de uma série sobre system design. Esta série tem como objetivo explicar conceitos complexos
+      de programação de maneira simples e objetiva para todos os tipos de profissionais, independentemente do nível de
+      senioridade ou tempo de experiência, contribuindo para a fixação de conceitos de ciência da computação e arquitetura.
+
+      Comecei a escrever esses textos em 2021, quando tinha a intenção de produzir material explicativo sobre engenharia
+      para profissionais de Site Reliability Engineering (SRE). Hoje, revendo com uma nova perspectiva, consegui revisar
+      esse material para torná-lo útil e acessível a todos.
+
+      Todos os artigos vão, em algum momento, utilizar analogias como "mundo real" para tornar a lógica mais clar e facilitar
+      a explicação e compreensão. Neste texto, vou explicar tópicos como Multithreading, Concorrência e Paralelismo.
+
+      Não é meu objetivo detalhar exaustivamente todos os aspectos do mundo ou explicar todos os tópicos envolvendo esse
+      tema com termos complexos da literatura. Meu objetivo é que você compreenda os conceitos, consiga aplicar e,
+      principalemente, explicar para outra pessoa usando os mesmos exemplos ou criando novos. Prometo tornar isso divertido
+
+      Utilizaremos a linguagem de programação Go para exemplificar alguns algoritmos. Embora utilizaremos recursos nativos
+      como Goroutines, Channels e WaitGroups, a ideia não é tornar este material um artigo específico sobre a linguagem;
+      Ele pode ser aproveitado conceitualmente para diversos contextos.
+
+      Vamos começar detalhando alguns conceitos que serão úteis durante o artigo:
+
+  - name: O que é um Processo?
+    content: |
+      Um processo é basicamente uma instância de um programa em execução. Esse programa contém uma série de instruções, e
+      o processo é a  execução real dessas instruções. Em outras palavras, um processo é um programa em ação.
+
+      Ao iniciarmos aplicativos como o navegador, IDE, agentes, aplicações, banco de dados e outros serviços, o sistema
+      operacional cria um processo para cada um desses programas, fornecendo os recursos necessários para sua execução.
+      Isso inclui espaço de memória isolado, threads, contextos e a gestão do próprio ciclo de vida do processo.
+
+  - name: O que é uma Thread?
+    content: |
+      Uma thread é a menor unidade de processamento que pode ser gerenciada por um sistema operacional. Ele representa uma
+      sequência de instruções programadas que pode ser executadas de forma independente em um núcluo de CPU. Dentro do
+      processo, múltiplas threads podem ser utilizadas para realizar tarefas de forma concorrente, visando melhorar a
+      eficiência do programa, enquanto uma thread aguarda por uma ação demorada, como uma requisição HTTP, o programa pode
+      prosseguir com a execução de outras threads. As threads de um mesmo programa compartilham o mesmo espaço de memória
+      e os recursos alocados. Sistemas que possuem múltiplas CPUs, ou CPUs com múltiplos núcleos, podem executar threads
+      simultaneamente em núcleos diferentes da CPU, permitindo o paralelismo. Imagine as threads como várias tarefas menores
+      que precisam ser realizadas em um churrasco.
+
+  - name: O que é Multithreading?
+    content: |
+      Multithreading é uma técnica de programação que consiste na criação de múltiplas threads (fluxos de execução independente)
+      dentro de um único processo. Cada thread pode ser responsável por diferentes tarefas ou partes de uma tarefa mais ampla.
+      Este método pode ser aplicado tanto em contextos concorrentes quanto paralelos. Em sistemas com um único núcleo do
+      processador, o multithreading facilita a concorrência (alternância rápida entre threads para criar a ilusão de simultaneamente).
+      Já em sistemas multiprocessadores, ou com múltiplos núcleos, o multithreading pode alcançar paralelismo real, com
+      threads sendo executadas simultaneamente em núcleos distintos da CPU**, otimizando o uso dos recursos e melhorando
+      a eficiência e o desempenho do processo.
+
+      Para ilustrar o conceito de multithread, pense em seus restaurantes favoritos. Aqui, o processo é o restaurante
+      funcionando, com o objetivo de servir comida aos clientes. Durante um horário de pico, como o almoço em um dia útil,
+      as threads são como os funcionários da cozinha. Cada cozinheiro (thread) é responsável por preparar um prato diferentes
+      simultaneamente, acelerando o atendimento dos pedidos. Dessa forma, vários pratos são preparados ao mesmo tempo,
+      aumentando a eficiência e diminuindo o tempo de espera dos clientes.
+
+      Agora que já exploramos alguns conceitos teóricos importantes, podemos seguir com a explicação mais detalhada.
+
+  - name: Concorrência
+    content: |
+      Imagine que você esta preparando um churrasco sozinho. Você é responsável por organizar a geladeira, fazer os cortes
+      de carne, preparar os vegetais para os amigos vegetarianos, fazer caipirinhas e gelar a cerveja. Você alterna entre
+      essas tarefas, trabalhando um pouco em cada uma, apesar de ser responsável por todas elas.
+
+      Esse cenário é um exemplo de concorrência. onde você está gerenciando várias tarefas, mas não necessariamente trabalhando
+      em mais de uma delas simultaneamente. Você se alterna entre as tarefas, criando a impressão de que tudo está progredindo
+      ao mesmo tempo.
+
+      Concorrência é sobre lidar com muitas tarefas ao mesmo tempo, mas não de forma simultânea. É a habilidade de uma
+      aplicação gerenciar múltiplas tarefas e instruções em segundo plano, mesmo que essas instruções não sejam sendo
+      processadas ao mesmo tempo, ou executadas em outros núcleos do processador.
+
+  - name: Exemplo de Implementação
+    Content: |
+      Agora, vamos criar um algoritmo que abstrai o nosso churrasco. Este algoritmo seguirá a lógica:
+      - Listar as atividades do churrasco.
+      - Executar essas tarefas em goroutines simultâneas, com cada uma aguardando seu respectivo tempo de preparo.
+      - Monitorar a conclusão das atividades.
+
+      Link: https://go.dev/play/p/d7HzIKIRnD0
+
+  - name: Paralelismo
+    content: |
+      Ainda estamos no exemplo do churrasco. Desta vez você tem amigos para ajudar: um corta a carne, outra acende
+      churrasqueira, outro gela a cerveja e mais um faz a caipirinha. Todas essas tarefas estão ocorrendo em paralelo,
+      com cada pessoa responsável por uma parte do processo.
+
+      Isso ilustra o paralelismo. Mútiplas tarefas e instruções ocorrendo simultaneamente, executadas por múltiplos núcleos
+      de processadores.
+
+      Diferentemente da concorrência, onde se trata de gerenciar várias tarefas ao mesmo tempo, mas com a apenas uma ativa
+      por vez, o paralelismo envolve fazer várias coisas ao mesmo tempo.
+
+      Paralelismo é empregado em situações onde o desempenho e a eficiência são críticos, e há recursos suficientes, como
+      múltiplos núcleos de CPU, para executar diversas tarefas simultaneamente.
+
+      Em ambientes paralelos, processos ou threads frequentemente precisam coordenar suas ações, e comunicar-se entre si.
+      Mecanismos de sincronização, como semáforos, mutexes e monitores, são ferramentas essenciais para evitar race
+      conditions e garantir a consistência dos dados, embora isso possa acrescentar complexidade à programação e ao debugging
+      de programas que implementam paralelismo.
+
+      Paralelismo em computação é um campo de pesquisa ativo e continua evolindo, especialmente com o desenvolvimento de
+      novas arquiteturas de hardware e a crescente demanda por processamento de grandes volumes de dados e computação de
+      alto desempenho.
+
+  - name: Implementando um algoritmo de paralelismo
+    content: |
+      Vamos simular novamente um churrasco em código, mas agora sob condições de paralelismo. Neste snippet, vamos:
+      - Identificar quantos amigos (CPUs) estão disponíveis para ajudar no churrasco.
+      - Criar uma lista de atividades do churrasco, informando o tempo de preparo e quem é o responsável por cada tarefa.
+      - Determinar o número ideal de tarefas e distribuí-las entre os amisog de forma equilibrada.
+      - Alocar as tarefas entre os amigos (CPUs) em threads.
+      - Monitorar o output das tarefas.
+
+      Link: https://go.dev/play/p/2qEtDrT9p2V
+
+  - name: Paralelismo Externo vs Paralelismo Interno
+    content: |
+      O paralelismo pode ser divido em duas categorias: interno e externo.
+
+    subtopics:
+      - name: Paralelismo interno
+        content: |
+          O paralelismo interno, também conhecido como paralelismo intrínceso, ocorre dentro de um
+          processo. É o paralelismo que você implementa no código da sua aplicação quando precisa dividir tarefas ou itens em
+          memória entre várias sub-tarefas que podem ser processadas simultaneamente. Basicamente, é o paralelismo que você
+          cria via código para ser executado dentro do seu container ou servidor.
+
+      - name: Paralelismo Externo
+        content: |
+          Já o paralelismo externo refere-se à execução simultânea de múltiplas tarefas em diferentes
+          hardwares, máquinas ou containers. Esse conceito é aplicado em ambientes de computação distribuída, como Hadoop e
+          Spark, consumo de mensagens vindas de messages brokers como RabbitMQ, SQS, streamings como Kafka que distribuem
+          granges volumes de dados em vários servidores e instâncias para realizar tarefas de ETL, Machine Learning e Analytics.
+          Também é visto em Load Balancers, que dividem as requisições entre várias instâncias da mesma aplicação para distribuir
+          o tráfego.
+
+          Link: https://lucid.app/lucidspark/d7538443-6d16-4b4e-a591-b1e8b8f5ff67/edit?viewport_loc=-11%2C-11%2C2560%2C1277%2C0_0&invitationId=inv_e7c2a3b6-113c-4757-9fb4-c4f357c78cc7
+
+  - name: Paralelismo vs Concorrência
+    content: |
+      Após uma análise detalhada, conseguimos distinguir conceitualmente concorrência de paralelismo. A concorrência lida com
+      a execução de várias tarefas ao mesmo tempo, permitindo que um sistema execute múltiplas operações aparentemente
+      simultâneas. Já o paralelismo envolve a execução literal de várias operações ou tarefas ao mesmo tempo.
+
+      Concorrência no mais, significa também ter várias tarefas em parelelo onde você não tem controle na ordem que elas
+      serão processadas, tendo em vista que só é possível saber a ordem de execução após todas elas terem terminado.
+
+      Em sistemas com um único núcleo de CPU, a concorrência é normalmente alcançada através de multithreading, onde as
+      tarefas são alternadas rapidamente, criando a ilusão de execução simultânea. Por outro lado, o paralelismo requer
+      hardware com múltiplos núcleos, permitindo que cada núcleo execute diferentes threads ou processos simultaneamente.
+
+      Paralelimos em geral é concorrência, mas nem toda concorrência é paralela.
+
+      Link: https://lucid.app/lucidchart/d9a7c2f1-292a-46c7-aab5-61543328cd13/edit?invitationId=inv_5eb2f68d-cbcd-453d-bb9d-57cd170e8d6a
+
+  - name: Lidando com Parelismo e concorrência
+    content: |
+      Agora que detalhamos de forma lúdica e conceitual a definição de programação paralela e concorrente, é hora de explorar
+      os desafios e ferramentas existentes para trabalhar com essas estratégias. Embora abordagens paralelas e concorrentes
+      ofereçam várias vantagens, como melhoria de performance, escalabilidade e otimização de recursos, elas também trazem
+      desafios significativos. Estes incluem questões de coordenação, condições de corrida, deadlocks, starvation, balanceamento
+      de carga de trabalho entre outros. Vamos agora definir conceitualmente alguns desses termos para facilitar seu
+      entendimento e capacidade de explicá-los no futuro.
+
+    subtopics:
+      - name: Deadlocks e Starvation
+        content: |
