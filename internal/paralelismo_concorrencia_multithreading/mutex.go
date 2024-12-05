@@ -4,19 +4,21 @@ import (
 	"fmt"
 	"sync"
 	"time"
+
+	"github.com/fabianoflorentino/study_system_design/pkg/common"
 )
 
 var grelhaOcupada sync.Mutex
 
 func RaceConditionComMutex() {
 	for idx := 0; idx < alimentoChurrasco; idx++ {
-		wg.Add(1)
+		common.Wg.Add(1)
 		go func() {
 			grelharComMutex()
-			defer wg.Done()
+			defer common.Wg.Done()
 		}()
 	}
-	wg.Wait()
+	common.Wg.Wait()
 
 	fmt.Println("Total de itens grelhados na churrasqueira: ", grelhados)
 }

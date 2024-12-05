@@ -5,15 +5,10 @@ package paralelismo_concorrencia_multithreading
 
 import (
 	"fmt"
-	"sync"
 	"time"
-)
 
-// Atividade represents an activity with a name and a duration in minutes.
-type AtividadeConcorrencia struct {
-	Nome  string
-	Tempo int
-}
+	"github.com/fabianoflorentino/study_system_design/pkg/common"
+)
 
 // Churrasco simulates the preparation of a barbecue with multiple tasks running concurrently.
 // It creates a channel to communicate the completion of each task and uses a WaitGroup to wait for all tasks to finish.
@@ -22,34 +17,32 @@ type AtividadeConcorrencia struct {
 func ChurrascoConcorrencia() {
 	churrasco := make(chan string)
 
-	var wg sync.WaitGroup
-
-	tarefas := []AtividadeConcorrencia{
-		{"picanha", 5},
-		{"costela", 7},
-		{"linguiça", 3},
-		{"salada", 2},
-		{"bebidas", 1},
-		{"churrasqueira", 2},
-		{"queijo", 3},
+	tarefas := []common.AtividadeConcorrencia{
+		{Nome: "picanha", Tempo: 5},
+		{Nome: "costela", Tempo: 7},
+		{Nome: "linguiça", Tempo: 3},
+		{Nome: "salada", Tempo: 2},
+		{Nome: "bebidas", Tempo: 1},
+		{Nome: "churrasqueira", Tempo: 2},
+		{Nome: "queijo", Tempo: 3},
 	}
 
 	for _, tarefa := range tarefas {
-		wg.Add(1)
-		go func(t AtividadeConcorrencia) {
+		common.Wg.Add(1)
+		go func(t common.AtividadeConcorrencia) {
 			prepararConcorrencia(t.Nome, t.Tempo, churrasco)
 		}(tarefa)
 	}
 
 	go func() {
-		wg.Wait()
+		common.Wg.Wait()
 		close(churrasco)
 		fmt.Println("Churrasco terminou :/")
 	}()
 
 	for item := range churrasco {
 		fmt.Printf("%s foi preparado.\n", item)
-		wg.Done()
+		common.Wg.Done()
 	}
 }
 

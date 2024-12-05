@@ -5,40 +5,33 @@ import (
 	"runtime"
 	"sync"
 	"time"
+
+	"github.com/fabianoflorentino/study_system_design/pkg/common"
 )
 
-type AtividadeParalelismo struct {
-	Nome        string
-	Tempo       int
-	Responsavel int
-}
-
 func ChurrascoParalelismo() {
-	churrasco := make(chan AtividadeParalelismo)
-
-	var wg sync.WaitGroup
-
+	churrasco := make(chan common.AtividadeParalelismo)
 	numCPU := runtime.NumCPU()
 
 	fmt.Printf("Número de CPU's (Amigos) para ajudar no churrasco: %v\n", numCPU)
 
-	tarefas := []AtividadeParalelismo{
-		{"picanha", 5, 0},
-		{"costela", 7, 0},
-		{"linguica", 3, 0},
-		{"salada", 2, 0},
-		{"gelar cerveja", 1, 0},
-		{"organizar geladeira", 1, 0},
-		{"queijo", 3, 0},
-		{"caipirinha", 2, 0},
-		{"panceta", 4, 0},
-		{"espetinhos", 3, 0},
-		{"abacaxi", 3, 0},
-		{"limpar piscina", 1, 0},
-		{"molhos", 2, 0},
-		{"pão de alho", 4, 0},
-		{"arroz", 4, 0},
-		{"farofa", 4, 0},
+	tarefas := []common.AtividadeParalelismo{
+		{Nome: "picanha", Tempo: 5, Responsavel: 0},
+		{Nome: "costela", Tempo: 7, Responsavel: 0},
+		{Nome: "linguica", Tempo: 3, Responsavel: 0},
+		{Nome: "salada", Tempo: 2, Responsavel: 0},
+		{Nome: "gelar cerveja", Tempo: 1, Responsavel: 0},
+		{Nome: "organizar geladeira", Tempo: 1, Responsavel: 0},
+		{Nome: "queijo", Tempo: 3, Responsavel: 0},
+		{Nome: "caipirinha", Tempo: 2, Responsavel: 0},
+		{Nome: "panceta", Tempo: 4, Responsavel: 0},
+		{Nome: "espetinhos", Tempo: 3, Responsavel: 0},
+		{Nome: "abacaxi", Tempo: 3, Responsavel: 0},
+		{Nome: "limpar piscina", Tempo: 1, Responsavel: 0},
+		{Nome: "molhos", Tempo: 2, Responsavel: 0},
+		{Nome: "pão de alho", Tempo: 4, Responsavel: 0},
+		{Nome: "arroz", Tempo: 4, Responsavel: 0},
+		{Nome: "farofa", Tempo: 4, Responsavel: 0},
 	}
 
 	fmt.Printf("Número tarefas do churrasco: %v.\n", len(tarefas))
@@ -56,13 +49,13 @@ func ChurrascoParalelismo() {
 		if end > len(tarefas) {
 			end = len(tarefas)
 		}
-		wg.Add(1)
+		common.Wg.Add(1)
 
-		go prepararParalelismo(tarefas[idx:end], churrasco, amigo, &wg)
+		go prepararParalelismo(tarefas[idx:end], churrasco, amigo, &common.Wg)
 	}
 
 	go func() {
-		wg.Wait()        // Espera que todas as goroutines chamem Done()
+		common.Wg.Wait() // Espera que todas as goroutines chamem Done()
 		close(churrasco) // Fecha o canal após todas as atividades do churrasco terminarem
 	}()
 
@@ -71,7 +64,7 @@ func ChurrascoParalelismo() {
 	}
 }
 
-func prepararParalelismo(atividades []AtividadeParalelismo, churrasco chan<- AtividadeParalelismo, amigo int, wg *sync.WaitGroup) {
+func prepararParalelismo(atividades []common.AtividadeParalelismo, churrasco chan<- common.AtividadeParalelismo, amigo int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for _, atividade := range atividades {
 		atividade.Responsavel = amigo

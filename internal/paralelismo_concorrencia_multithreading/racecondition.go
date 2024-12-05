@@ -2,23 +2,23 @@ package paralelismo_concorrencia_multithreading
 
 import (
 	"fmt"
-	"sync"
 	"time"
+
+	"github.com/fabianoflorentino/study_system_design/pkg/common"
 )
 
 var grelhados int = 0
-var wg sync.WaitGroup
 var alimentoChurrasco = 100
 
 func RaceCondition() {
 	for idx := 0; idx < alimentoChurrasco; idx++ {
-		wg.Add(1)
+		common.Wg.Add(1)
 		go func() {
 			grelhar()
-			defer wg.Done()
+			defer common.Wg.Done()
 		}()
 	}
-	wg.Wait()
+	common.Wg.Wait()
 
 	fmt.Println("Total de itens grelhados na churrasqueira: ", grelhados)
 }

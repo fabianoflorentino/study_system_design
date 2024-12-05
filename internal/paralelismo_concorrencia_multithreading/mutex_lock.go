@@ -1,24 +1,13 @@
 package paralelismo_concorrencia_multithreading
 
 import (
-	"context"
 	"fmt"
 	"time"
 
 	redis "github.com/redis/go-redis/v9"
+
+	"github.com/fabianoflorentino/study_system_design/pkg/common"
 )
-
-// ctx is a global variable that holds a background context.
-// It is used as a base context for creating other contexts in the application.
-// Background contexts are typically used for top-level contexts in main functions, initialization, and tests.
-var ctx = context.Background()
-
-// PedidoDeCompra represents a purchase order with an ID, item name, and quantity.
-type PedidoDeCompra struct {
-	Id         string
-	Item       string
-	Quantidade int
-}
 
 // MutexLock is a function that handles the processing of a new order message
 // with a mutex lock mechanism using Redis. It ensures that the resource
@@ -27,6 +16,7 @@ type PedidoDeCompra struct {
 // already locked, the function will print a message and return. After
 // processing the order, the lock is released.
 func MutexLock() {
+	ctx := common.Ctx
 	conn := connRedis("localhost:6379", "", 0)
 
 	NovoPedido := consomeMensagem()
@@ -68,7 +58,7 @@ func MutexLock() {
 // Returns:
 //
 //	bool: Always returns true to indicate successful processing.
-func processaMenssagem(pedido PedidoDeCompra) bool {
+func processaMenssagem(pedido common.PedidoDeCompra) bool {
 	fmt.Println("Processando pedido", pedido.Id)
 	time.Sleep(1 * time.Second)
 
@@ -77,8 +67,8 @@ func processaMenssagem(pedido PedidoDeCompra) bool {
 
 // consomeMensagem simulates the consumption of a purchase order message.
 // It returns a PedidoDeCompra struct with predefined values.
-func consomeMensagem() PedidoDeCompra {
-	return PedidoDeCompra{
+func consomeMensagem() common.PedidoDeCompra {
+	return common.PedidoDeCompra{
 		Id:         "123",
 		Item:       "Camisa",
 		Quantidade: 2,
