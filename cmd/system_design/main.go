@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/fabianoflorentino/system_design/internal/paralelismo_concorrencia_multithreading"
+	"github.com/fabianoflorentino/study_system_design/internal/paralelismo_concorrencia_multithreading"
 )
 
 func main() {
