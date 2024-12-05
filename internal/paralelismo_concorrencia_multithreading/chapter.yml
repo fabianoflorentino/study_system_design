@@ -252,3 +252,12 @@ topics:
         - Durante a preparação, na funcão grelhar(), inserimos um Mutex.Lock() no início e um Mutex.Unlock() no final para
         liberar o recurso para a próxima thread.
         - Assim, garantimos um acesso sequencial a todos os processos para grelhar itens na churrasqueira.
+
+      Link: https://go.dev/play/p/sjqz6rD_aYB
+
+  - name: Mutex Distribuído
+    content: |
+      Já exploramos o uso de Mutex no modelo de paralelismo interno, onde o controle de paralelismo é implementado via
+      código. É igualmente importante entender a aplicação dessa lógica no paralelismo externo, em cenários arquiteturais
+      diversos como o consumo de mensagens de uma fila, eventos de um tópico do kafka, tratamento de solicitações HTTP e
+      outras situações que demandam idempotência, atomicidade e exclusividade em determinados processos.
