@@ -261,3 +261,18 @@ topics:
       código. É igualmente importante entender a aplicação dessa lógica no paralelismo externo, em cenários arquiteturais
       diversos como o consumo de mensagens de uma fila, eventos de um tópico do kafka, tratamento de solicitações HTTP e
       outras situações que demandam idempotência, atomicidade e exclusividade em determinados processos.
+
+      Desenvolver um Mutex para sistemas distribuídos apresenta uma série de desafios, mas em alguns aspectos, é mais
+      facilitado do que os Mutexes em cenários de paralelismo interno com memória compartilhada. Entre os possíveis
+      problemas que podemos encontrar estão a comunicação entre componentes, latência de rede e falha gerais nos serviços.
+
+      Para funcionar eficientemente, esses sistemas geralmente dependem de uma base de dados centralizada para manter o
+      estado dos processos compartilhados entre todas as réplicas dos consumidores de mensagens. Isso é crucial para lidar
+      com duplicidade de mensagens, eventos ou solicitações devido a cenários imprevistos.
+
+      Algumas estratégias comuns utilizam banco de dados otimizados para operações de leitura e escrita chave/valor, como
+      Redis, Memcached, Cassandra, DynamoDB, além de tecnologias como Zookeeper.
+
+      No exemplo a seguir, que utilizamos o Redis para apresentar um fluxo lógico de um algoritmo de Mutex. Ao receber um
+      pseudo-mensagem, verificamos se já existe um lock para ela no Redis. Se o lock existir, descartamos o processamento
+      da mensagem. Se não existir, criamos o lock, processamos a menssagem e, em seguida, liberamos o lock.
