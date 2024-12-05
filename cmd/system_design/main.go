@@ -30,5 +30,9 @@ func main() {
 		if option[0] == "--mutex" {
 			paralelismo_concorrencia_multithreading.RaceConditionComMutex()
 		}
+
+		if option[0] == "--mutexlock" {
+			paralelismo_concorrencia_multithreading.MutexLock()
+		}
 	}
 }
