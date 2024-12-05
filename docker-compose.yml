@@ -1,0 +1,32 @@
+---
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - system_design
+
+  app:
+    image: fabianoflorentino/system_design:v0.0.1
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    networks:
+      - system_design
+    volumes:
+      - .:/app
+    tty: true
+    stdin_open: true
+    healthcheck:
+      test: ["CMD-SHELL", "ps aux |grep 'sleep' || exit 1"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    depends_on:
+      redis:
+        condition: service_started
+
+networks:
+  system_design:
+    driver: bridge
