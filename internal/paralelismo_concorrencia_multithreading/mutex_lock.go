@@ -17,7 +17,7 @@ import (
 // processing the order, the lock is released.
 func MutexLock() {
 	ctx := common.Ctx
-	conn := connRedis("localhost:6379", "", 0)
+	conn := connRedis("redis:6379", "", 0)
 
 	NovoPedido := consomeMensagem()
 	mutexKey := NovoPedido.Id
