@@ -7,6 +7,13 @@ services:
     networks:
       - system_design
 
+  zookeeper:
+    image: zookeeper:latest
+    ports:
+      - "2181:2181"
+    networks:
+      - system_design
+
   app:
     image: fabianoflorentino/system_design:v0.0.1
     build:
