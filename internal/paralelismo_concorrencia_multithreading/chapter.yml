@@ -276,3 +276,25 @@ topics:
       No exemplo a seguir, que utilizamos o Redis para apresentar um fluxo lógico de um algoritmo de Mutex. Ao receber um
       pseudo-mensagem, verificamos se já existe um lock para ela no Redis. Se o lock existir, descartamos o processamento
       da mensagem. Se não existir, criamos o lock, processamos a menssagem e, em seguida, liberamos o lock.
+
+    subtopics:
+      - name: Mutex Distribuído - Zookeeper
+        content: |
+          Uma alternativa elegante ao Redis para gerenciar locks distribuídos é o uso do Apache Zookeeper. Embora a lógica
+          fundamental seja semelhante ao exemplo anterior, o Zookeeper apresenta algumas peculiaridades interessantes.
+
+          A criação de um mutex distribuído com Go utilizando Apache Zookeeper é uma tarefa avançada que exige a manipulação
+          de znodes, (nós do Zookeeper), para gerenciar as travas de forma distribuída. Vamos explorar um exemplo básico
+          de como isso pode ser implementado.
+
+          Uma vantagem notável dos locks do Zookeeper é a capacidade de definir um timeout de sessão. Isso garante que
+          todos os locks gerenciados pelo processo sejam excluídos automaticamente após o término de execução do programa.
+
+          Segue a lógica para o uso do Zookeeper na gestão de locks:
+
+          - Verificação de lock: Checar se já existe um lock para o recurso específico.
+          - Gerenciamento de Mensagem: Caso o lock exista, a mensagem é ignorada e retornada ao pool. Se não existir,
+          prosseguir para o próximo passo.
+          - Criação de lock: Estabelecer um lock para o recurso.
+          - Processamento da Solicitação: Realizar as operações necessárias enquanto o lock está ativo.
+          - Remoção do lock: Após o processamento bem-sucedido, remover o lock para liberar os recursos.
