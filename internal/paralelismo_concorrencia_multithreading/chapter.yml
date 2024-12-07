@@ -369,3 +369,5 @@ topics:
           - Remover um espaço de semáforo a lógica de incrementar / decrementar. Vamos criar um canal com o tamanho máximo
           de itens que cabem na grelha, adicionar um objeto para ocupar a posição e em seguida removê-lo quando liberar o
           processo.
+
+          Link: https://go.dev/play/p/qZmrpyU_6a9
