@@ -328,3 +328,44 @@ topics:
     subtopics:
       - name: Exemplo de Implementação
         content: |
+
+          Link: https://go.dev/play/p/AsoJtOIUyde
+
+  - name: Semáforos e Worker Pools
+    content: |
+      Existem dois tipos principais de semáforos: o Semáforo Binário, que similar ao Mutex já discutido, e o Semáforo Contador,
+      que vamos abordar agora.
+
+      Imagine um churrasco com uma grelha maior, capaz de comportar um número definido de alimentos simultaneamente. A grelha
+      representa um recurso compartilhado, e a capacidade máxima de alimentos que ela pode assar por vez ilustra o conceito
+      de um semáforo contador.
+
+      Suponhar que a grelha pode acomodar até 3 pedaços de carne de cada vez. Cada alimento colocado na grelha ocupa um
+      espaço do semáforo, decretementando seu valor até atingir 0, indicando que a grelha está completamente ocupada. Quando
+      um alimento é retirado da grelha, o contador é incrementado, indicando que há espaço mais um alimento se assado.
+
+      Um semáforo é outro mecanismo de sincronização usado em programação paralela para controlar o acesso a recursos
+      compartilhados e evitar Race Conditions e inconsistências de dados. Ele se baseia em operações atômicas, que incluem:
+
+        - Wait (Ocupar um recurso): Utilizada para adquirir um recurso. Por exemplo, em um semáforo com 3 posições, podemos
+        ter no máximo 3 threads trabalhando simultaneamente. Ao executar Wait(), o número disponível é decrementado, indicando
+        uma posição está ocupada.
+
+        - Signal (Liberar um recurso): O oposto do Wait, a operação Signal() incrementa o contador de semáforo até o limite
+        especificado. Quando um processo em Wait() conclui, ele chama Signal() para liberar um espaço permitindo que outra
+        thread ocupe esse lugar.
+
+      Os semáforos são eficientes para trabalhar com Worker Pools, que são conjuntos de threads executando tarefas de forma
+      controlada. Esse padrão é útil quando há muitas tarefas a serem realizdas, mas é necessário limitar o número de threads
+      em execução simultânea. Na nossa analogia, o Worker Pool seria o número de alimentos que a grelha pode acomodar.
+
+    subtopics:
+      - name: Exemplo de Implementação
+        content: |
+          - Determinar a capacidade da grelha: 3
+          - Verificar a quantidade de comida disponível para o churrasco: 10
+          - Criar um channel com o tamanho da capacidade da grelha para gerenciar o uso.
+          - Iniciar o preparo da comida, ocupando um espaço no semáforo ao começar a assar o alimentos.
+          - Remover um espaço de semáforo a lógica de incrementar / decrementar. Vamos criar um canal com o tamanho máximo
+          de itens que cabem na grelha, adicionar um objeto para ocupar a posição e em seguida removê-lo quando liberar o
+          processo.
