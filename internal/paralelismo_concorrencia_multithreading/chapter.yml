@@ -371,3 +371,13 @@ topics:
           processo.
 
           Link: https://go.dev/play/p/qZmrpyU_6a9
+
+  - name: Resumo
+    content: |
+      Neste artigo, exploramos os conceitos de Multithreading, Concorrência e Paralelismo, e como eles podem ser aplicados
+      em sistemas de computação. Através de analogias lúdicas e exemplos práticos, conseguimos ilustrar a diferença entre
+      concorrência e paralelismo, e como esses conceitos são fundamentais para a programação eficiente e escalável.
+
+      A programação paralela e concorrente é uma área complexa e desafiadora, mas essencial para o desenvolvimento de
+      sistemas modernos e eficientes. Através de técnicas como Mutexes, Spinlocks, Semáforos e Worker Pools, é possível
+      controlar o acesso a recursos compartilh
