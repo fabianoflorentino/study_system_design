@@ -380,4 +380,5 @@ topics:
 
       A programação paralela e concorrente é uma área complexa e desafiadora, mas essencial para o desenvolvimento de
       sistemas modernos e eficientes. Através de técnicas como Mutexes, Spinlocks, Semáforos e Worker Pools, é possível
-      controlar o acesso a recursos compartilh
+      controlar o acesso a recursos compartilhado e garantir a consistência dos dados em ambientes de multithreading e
+      paralelismo.
