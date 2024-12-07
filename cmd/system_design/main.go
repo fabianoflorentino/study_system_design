@@ -42,5 +42,9 @@ func main() {
 		if option[0] == "--spinlock" {
 			paralelismo_concorrencia_multithreading.SpinLock()
 		}
+
+		if option[0] == "--semaforo-worker-pool" {
+			paralelismo_concorrencia_multithreading.SemaforoWorkerPool()
+		}
 	}
 }
