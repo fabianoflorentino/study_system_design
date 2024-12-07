@@ -14,7 +14,7 @@ func RaceCondition() {
 	for idx := 0; idx < alimentoChurrasco; idx++ {
 		common.Wg.Add(1)
 		go func() {
-			grelhar()
+			grelharRaceCondition()
 			defer common.Wg.Done()
 		}()
 	}
@@ -23,7 +23,7 @@ func RaceCondition() {
 	fmt.Println("Total de itens grelhados na churrasqueira: ", grelhados)
 }
 
-func grelhar() {
+func grelharRaceCondition() {
 	grelhados++
 	time.Sleep(time.Microsecond * 100)
 }
