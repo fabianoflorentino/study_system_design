@@ -34,5 +34,9 @@ func main() {
 		if option[0] == "--mutexlock" {
 			paralelismo_concorrencia_multithreading.MutexLock()
 		}
+
+		if option[0] == "--zookeeper" {
+			paralelismo_concorrencia_multithreading.Zookeeper(os.Args[2])
+		}
 	}
 }
