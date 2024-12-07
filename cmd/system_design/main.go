@@ -38,5 +38,9 @@ func main() {
 		if option[0] == "--zookeeper" {
 			paralelismo_concorrencia_multithreading.Zookeeper(os.Args[2])
 		}
+
+		if option[0] == "--spinlock" {
+			paralelismo_concorrencia_multithreading.SpinLock()
+		}
 	}
 }
