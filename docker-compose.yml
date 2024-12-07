@@ -1,4 +1,3 @@
----
 services:
   redis:
     image: redis:alpine
@@ -6,16 +5,31 @@ services:
       - "6379:6379"
     networks:
       - system_design
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   zookeeper:
     image: zookeeper:latest
-    ports:
-      - "2181:2181"
+    hostname: zookeeper
+    container_name: zookeeper
     networks:
       - system_design
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+    healthcheck:
+      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   app:
-    image: fabianoflorentino/system_design:v0.0.1
+    image: fabianoflorentino/system_design:v0.0.2
     build:
       context: .
       dockerfile: build/Dockerfile
@@ -30,9 +44,13 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
+    env_file:
+      - ./config/.env
     depends_on:
       redis:
-        condition: service_started
+        condition: service_healthy
+      zookeeper:
+        condition: service_healthy
 
 networks:
   system_design:
